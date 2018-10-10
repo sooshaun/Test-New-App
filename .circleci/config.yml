@@ -1,0 +1,34 @@
+defaults : &defaults
+  working_directory: ~/testproject
+  docker;
+    - image: circleci/node:8
+
+version: 2
+jobs: 
+  build:
+    <<: *defaults
+    steps:
+      - checkout
+      - run:
+          name: yarninstall
+          command: yarn 
+      - save_cache:
+          key: v1-{{arch}}-cache-{{ checksum "package.json" }}
+          paths:
+            - ./node_modules
+  test:
+    <<: *defaults
+    steps:
+    - checkout
+    - restore_cache:
+        key: v1-{{arch}}-cache-{{ checksum "package.json" }}
+    - run:
+        name: Setup Test Output Directory
+        command: mkdir -p test-results/ava
+    - run:
+        name: Run tests
+        command: yarn test | npx tap-xunit > test-results/ava/results.xml
+    -run:
+        name: Run coverage report
+        
+  
