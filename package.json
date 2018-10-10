@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "testA": "ava",
-    "testBabel": "BABEL_ENV=test ava"
+    "testBabel": "BABEL_ENV=test ava",
+    "buildA": "BABEL_ENV=build rollup -c"
   },
   "ava": {
     "files": [
